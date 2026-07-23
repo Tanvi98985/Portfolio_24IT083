@@ -1,42 +1,113 @@
-# Student Portfolio
+# Portfolio_24IT083
 
-A React + Vite portfolio app built for Practical 1 (component architecture)
-and Practical 2 (routing + state management).
+A personal portfolio website built with React and Vite to showcase my projects, skills, and contact information. The application also integrates the GitHub REST API to dynamically display my public repositories.
+
+---
 
 ## Features
 
-- **Components:** Header, About, Skills, Footer, NavBar (Practical 1)
-- **Routing:** React Router with Home, Projects, and Contact pages, plus a
-  custom 404 page for unknown routes (Practical 2)
-- **State:** `useState` used to toggle project details visibility, and to
-  control the Contact page's message textarea with a live character count
+- Responsive portfolio website
+- Multi-page navigation using React Router
+- Reusable React components
+- Dynamic GitHub repository listing
+- Search repositories by name
+- Loading spinner while fetching data
+- Error handling with retry option
+- Displays repository name, repository link, and star count
+- Clean and modern user interface
 
-## Getting Started
+---
+
+## Technologies Used
+
+- React
+- Vite
+- JavaScript (ES6+)
+- HTML5
+- CSS3
+- React Router
+- GitHub REST API
+
+---
+
+## GitHub API
+
+The application fetches public repositories using the GitHub REST API.
+
+**API Endpoint**
+
+```
+https://api.github.com/users/Tanvi98985/repos
+```
+
+---
+
+## Installation
+
+Clone the repository:
+
+```bash
+git clone <repository-url>
+```
+
+Move into the project directory:
+
+```bash
+cd Portfolio_24IT083
+```
+
+Install dependencies:
 
 ```bash
 npm install
+```
+
+Start the development server:
+
+```bash
 npm run dev
 ```
 
-Then open the printed local URL (usually `http://localhost:5173`) in your
-browser.
+Open the application in your browser:
+
+```
+http://localhost:5173
+```
+
+---
 
 ## Project Structure
 
 ```
-src/
-├── main.jsx          # Wraps App in BrowserRouter
-├── App.jsx           # Defines routes, NavBar, Footer
-├── App.css           # Theme styling
-├── components/
-│   ├── Header.jsx
+src
+│── components
 │   ├── About.jsx
-│   ├── Skills.jsx
+│   ├── ErrorMessage.jsx
 │   ├── Footer.jsx
-│   └── NavBar.jsx
-└── pages/
-    ├── Home.jsx
-    ├── Projects.jsx
-    ├── Contact.jsx
-    └── NotFound.jsx
+│   ├── Header.jsx
+│   ├── NavBar.jsx
+│   ├── ProjectCard.jsx
+│   ├── Skills.jsx
+│   └── Spinner.jsx
+│
+│── pages
+│   ├── Contact.jsx
+│   ├── Home.jsx
+│   ├── NotFound.jsx
+│   └── Projects.jsx
+│
+├── App.jsx
+├── App.css
+├── index.css
+└── main.jsx
 ```
+
+---
+
+## Author
+
+**Tanvi Ramani**
+
+B.Tech Information Technology
+
+CHARUSAT University
