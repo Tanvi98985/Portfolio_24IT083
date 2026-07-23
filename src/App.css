@@ -306,3 +306,142 @@
   font-size: 0.9rem;
   margin-top: 2rem;
 }
+
+/* ============================= */
+/* Practical 3 - GitHub API CSS  */
+/* ============================= */
+
+.repo-heading {
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  color: var(--navy-dark);
+  font-size: 1.8rem;
+}
+
+.search-box {
+  width: 100%;
+  max-width: 400px;
+  padding: 0.8rem 1rem;
+  margin-bottom: 2rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.search-box:focus {
+  border-color: var(--navy);
+  box-shadow: 0 0 5px rgba(52, 73, 94, 0.3);
+}
+
+.repo-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.repo-card {
+  background: var(--white);
+  border-top: 4px solid var(--navy);
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.repo-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.repo-card h3 {
+  color: var(--navy-dark);
+  margin-bottom: 0.7rem;
+}
+
+.repo-card p {
+  color: var(--text-gray);
+  margin-bottom: 1rem;
+}
+
+.repo-card a {
+  display: inline-block;
+  text-decoration: none;
+  background: var(--navy);
+  color: var(--white);
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.repo-card a:hover {
+  background: var(--navy-dark);
+}
+
+/* ---------- Spinner ---------- */
+
+.spinner-container {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: var(--navy-dark);
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 6px solid #ddd;
+  border-top: 6px solid var(--navy);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- Error ---------- */
+
+.error-container {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: var(--navy-dark);
+  text-align: center;
+}
+
+.error-container h3 {
+  margin-bottom: 0.8rem;
+}
+
+.error-container p {
+  margin-bottom: 1rem;
+  color: var(--text-gray);
+}
+
+.error-container button {
+  background: var(--navy);
+  color: var(--white);
+  border: none;
+  padding: 0.7rem 1.4rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.error-container button:hover {
+  background: var(--navy-dark);
+}
