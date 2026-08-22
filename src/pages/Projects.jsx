@@ -64,8 +64,18 @@ function Projects() {
       <div className="project-grid">
         <ProjectCard
           title="Full Stack Task Manager (React + Node + MongoDB)"
-          description="A full-stack CRUD task manager built with React frontend, Express/Node backend, and MongoDB, demonstrating create/read/update/delete operations with proper loading and error states."
-          tags={["React", "Node.js", "Express", "MongoDB", "Mongoose", "CORS"]}
+          description="A full-stack CRUD task manager with JWT-based authentication, protected routes, and server-side validation, built with React, Express, and MongoDB."
+          tags={[
+            "React",
+            "Node.js",
+            "Express",
+            "MongoDB",
+            "Mongoose",
+            "CORS",
+            "JWT",
+            "bcrypt",
+            "Auth Middleware",
+          ]}
           demoUrl="/tasks"
           githubUrl="https://github.com/Tanvi98985/task-manager"
         />

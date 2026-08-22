@@ -1,19 +1,32 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import Task from '../models/Task.js';
+import authMiddleware from '../middleware/auth.js';
+import { validateTask } from '../middleware/validate.js';
 
 const router = express.Router();
 
 // Helper to check valid MongoDB ObjectId
 const isValidId = (id) => mongoose.Types.ObjectId.isValid(id);
 
+// Apply JWT authentication to ALL task routes
+router.use(authMiddleware);
+
 /**
  * @route   GET /tasks
- * @desc    Get all tasks sorted by newest first
+ * @desc    Get all tasks for the authenticated user (or general tasks), sorted by newest first
  */
 router.get('/', async (req, res, next) => {
   try {
-    const tasks = await Task.find().sort({ createdAt: -1 });
+    // Return tasks (matching user or existing unassigned tasks)
+    const query = {
+      $or: [
+        { user: req.user.id },
+        { user: { $exists: false } },
+        { user: null },
+      ],
+    };
+    const tasks = await Task.find(query).sort({ createdAt: -1 });
     return res.status(200).json(tasks);
   } catch (error) {
     return next(error);
@@ -22,22 +35,17 @@ router.get('/', async (req, res, next) => {
 
 /**
  * @route   POST /tasks
- * @desc    Create a new task
+ * @desc    Create a new task for the authenticated user
  */
-router.post('/', async (req, res, next) => {
+router.post('/', validateTask, async (req, res, next) => {
   try {
     const { title, description, completed } = req.body;
-
-    if (!title || typeof title !== 'string' || title.trim() === '') {
-      return res.status(400).json({
-        error: 'Task title is required.',
-      });
-    }
 
     const newTask = new Task({
       title: title.trim(),
       description: description ? description.trim() : '',
       completed: typeof completed === 'boolean' ? completed : false,
+      user: req.user.id,
     });
 
     const savedTask = await newTask.save();
