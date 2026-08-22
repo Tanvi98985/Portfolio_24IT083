@@ -63,6 +63,14 @@ function Projects() {
       {/* Existing Portfolio Projects */}
       <div className="project-grid">
         <ProjectCard
+          title="Full Stack Task Manager (React + Node + MongoDB)"
+          description="A full-stack CRUD task manager built with React frontend, Express/Node backend, and MongoDB, demonstrating create/read/update/delete operations with proper loading and error states."
+          tags={["React", "Node.js", "Express", "MongoDB", "Mongoose", "CORS"]}
+          demoUrl="/tasks"
+          githubUrl="https://github.com/Tanvi98985/task-manager"
+        />
+
+        <ProjectCard
           title="Portfolio Website"
           description="Responsive React portfolio."
         />

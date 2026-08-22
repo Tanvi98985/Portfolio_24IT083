@@ -17,6 +17,12 @@ function NavBar() {
         Projects
       </NavLink>
       <NavLink
+        to="/tasks"
+        className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
+      >
+        Task Manager
+      </NavLink>
+      <NavLink
         to="/contact"
         className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
       >

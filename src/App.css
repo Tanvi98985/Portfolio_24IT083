@@ -445,3 +445,15 @@
 .error-container button:hover {
   background: var(--navy-dark);
 }
+
+/* ---------- Task Manager & Toast Animation ---------- */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
