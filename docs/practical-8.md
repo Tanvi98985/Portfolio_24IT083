@@ -35,8 +35,11 @@ In this practical, route-based code splitting and lazy loading were implemented 
 ### 2. After Build (Split Route Chunks)
 ![After Build](after-build.png)
 
-### 3. Suspense Fallback UI (Slow 3G Network Throttling)
-![Slow 3G Throttled Fallback](throttled-fallback.png)
+### 3. Suspense Fallback UI — Projects Route (Slow 3G Network Throttling)
+![Slow 3G Throttled Fallback - Projects](throttled-fallback.png)
+
+### 4. Suspense Fallback UI — Tasks Route (Slow 3G Network Throttling)
+![Slow 3G Throttled Fallback - Tasks](throttled-fallback-tasks.png)
 
 ---
 
