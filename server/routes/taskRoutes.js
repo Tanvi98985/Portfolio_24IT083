@@ -37,12 +37,16 @@ router.get('/', async (req, res, next) => {
 
     if (cachedTasks) {
       cacheStats.hits++;
+      console.log('\n========================================');
       console.log(`[CACHE HIT] ${cacheKey}`);
+      console.log('========================================\n');
       return res.status(200).json(cachedTasks);
     }
 
     cacheStats.misses++;
+    console.log('\n========================================');
     console.log(`[CACHE MISS] ${cacheKey}`);
+    console.log('========================================\n');
 
     // Return tasks (matching user or existing unassigned tasks)
     const query = {
@@ -80,12 +84,16 @@ router.get('/:id', async (req, res, next) => {
 
     if (cachedTask) {
       cacheStats.hits++;
+      console.log('\n========================================');
       console.log(`[CACHE HIT] ${cacheKey}`);
+      console.log('========================================\n');
       return res.status(200).json(cachedTask);
     }
 
     cacheStats.misses++;
+    console.log('\n========================================');
     console.log(`[CACHE MISS] ${cacheKey}`);
+    console.log('========================================\n');
 
     const query = {
       _id: id,
@@ -130,7 +138,9 @@ router.post('/', validateTask, async (req, res, next) => {
     // Invalidate user's all-tasks cache after successful write
     const allTasksKey = `all_tasks_${req.user.id}`;
     cache.del(allTasksKey);
+    console.log('\n========================================');
     console.log(`[CACHE INVALIDATED] ${allTasksKey}`);
+    console.log('========================================\n');
 
     return res.status(201).json(savedTask);
   } catch (error) {
@@ -182,8 +192,10 @@ router.put('/:id', async (req, res, next) => {
     const singleTaskKey = `task_${req.user.id}_${id}`;
     cache.del(allTasksKey);
     cache.del(singleTaskKey);
+    console.log('\n========================================');
     console.log(`[CACHE INVALIDATED] ${allTasksKey}`);
     console.log(`[CACHE INVALIDATED] ${singleTaskKey}`);
+    console.log('========================================\n');
 
     return res.status(200).json(updatedTask);
   } catch (error) {
@@ -217,8 +229,10 @@ router.delete('/:id', async (req, res, next) => {
     const singleTaskKey = `task_${req.user.id}_${id}`;
     cache.del(allTasksKey);
     cache.del(singleTaskKey);
+    console.log('\n========================================');
     console.log(`[CACHE INVALIDATED] ${allTasksKey}`);
     console.log(`[CACHE INVALIDATED] ${singleTaskKey}`);
+    console.log('========================================\n');
 
     return res.status(200).json({
       message: 'Task deleted successfully.',
