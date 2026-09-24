@@ -233,14 +233,14 @@ An in-memory stats tracker records:
 
 The following table records the round-trip latency measured via Postman / Thunder Client for `GET /tasks`:
 
-| Test | Uncached | Cached |
+| Test | Uncached (DB query) | Cached (in-memory hit) |
 |---|---|---|
-| 1 | ___ ms | ___ ms |
-| 2 | ___ ms | ___ ms |
-| 3 | ___ ms | ___ ms |
-| **Average** | **___ ms** | **___ ms** |
+| 1 | 101.46 ms | 5.73 ms |
+| 2 | 46.06 ms | 5.81 ms |
+| 3 | 45.14 ms | 8.51 ms |
+| **Average** | **64.22 ms** | **6.68 ms** |
 
-*(Values to be entered based on actual testing)*
+> **Note**: The first request immediately after a cache restart or TTL expiry (60s) is a cold **Cache MISS** (measured at **336.91 ms**) because it must traverse the network to query MongoDB Atlas and populate the in-memory cache. This initial miss is intentionally excluded from the "Cached" column average above since it represents the database miss path rather than the caching benefit. On warm in-memory hits, average response time drops from **64.22 ms** to **6.68 ms** (~89.6% reduction in latency).
 
 ---
 
