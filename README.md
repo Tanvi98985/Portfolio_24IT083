@@ -104,6 +104,23 @@ src
 
 ---
 
+## Practical Documentation
+
+- [Practical 8: Route-Based Lazy Loading & Performance Optimization](docs/practical-8.md)
+- [Practical 9: In-Memory Caching and Query Optimization](docs/practical-9.md)
+
+### Practical 9 Features Added:
+- **node-cache**: Server-side in-memory caching engine.
+- **60-second TTL**: Automatic time-to-live expiration for cached tasks.
+- **User-Specific Caching**: Isolated cache keys (`all_tasks_${userId}`) ensuring full user privacy.
+- **Single-Task Caching**: Cached individual task lookup (`GET /tasks/:id`) with key `task_${userId}_${taskId}`.
+- **Cache Invalidation**: Automatic cache deletion upon `POST`, `PUT`, and `DELETE` writes after successful database operations.
+- **Cache Hit/Miss Counter**: In-memory counters tracking cache efficiency.
+- **Cache Statistics Endpoint**: Protected debug endpoint `GET /tasks/cache/stats`.
+- **Performance Testing**: Measured cached vs. uncached API latency.
+
+---
+
 ## Author
 
 **Tanvi Ramani**

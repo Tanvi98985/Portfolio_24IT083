@@ -161,3 +161,27 @@ export const deleteTask = async (id) => {
   });
   return handleResponse(response);
 };
+
+/**
+ * Fetch a single task by ID (GET /tasks/:id)
+ * @param {string} id - MongoDB Task _id
+ */
+export const fetchTaskById = async (id) => {
+  const response = await fetch(`${BASE_URL}/tasks/${id}`, {
+    method: 'GET',
+    headers: getHeaders(),
+  });
+  return handleResponse(response);
+};
+
+/**
+ * Fetch in-memory cache statistics (GET /tasks/cache/stats)
+ */
+export const fetchCacheStats = async () => {
+  const response = await fetch(`${BASE_URL}/tasks/cache/stats`, {
+    method: 'GET',
+    headers: getHeaders(),
+  });
+  return handleResponse(response);
+};
+

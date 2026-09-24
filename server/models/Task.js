@@ -32,6 +32,9 @@ const taskSchema = new mongoose.Schema(
   }
 );
 
+// Query optimization: Index on user and createdAt to optimize filtering and sorting (createdAt: -1)
+taskSchema.index({ user: 1, createdAt: -1 });
+
 // Explicitly bind to 'tasks' collection to ensure clean separation from other practicals
 const Task = mongoose.models.Task || mongoose.model('Task', taskSchema, 'tasks');
 
