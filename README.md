@@ -108,6 +108,16 @@ src
 
 - [Practical 8: Route-Based Lazy Loading & Performance Optimization](docs/practical-8.md)
 - [Practical 9: In-Memory Caching and Query Optimization](docs/practical-9.md)
+- [Practical 10: Asynchronous Processing with Event-Driven Architecture](docs/practical-10.md)
+
+### Practical 10 Features Added:
+- **Node.js EventEmitter**: Native publish-subscribe event-driven architecture using built-in `events` module.
+- **Asynchronous Decoupling**: API responses return immediately to the client without waiting for long-running notification or audit processes.
+- **Task Domain Events**: Dedicated listeners for `task-created`, `task-deleted`, and `error`.
+- **User Association**: Resolves user email from MongoDB asynchronously during notification delivery.
+- **Simulated Notification Delay**: Configurable `NOTIFICATION_DELAY_MS` (default 2000 ms) showcasing background non-blocking execution.
+- **Sync vs Async Comparison**: `?mode=sync` testing mode demonstrating an 88x latency improvement (~23 ms vs ~2028 ms).
+- **Error Resilience**: Catches and forwards event errors so unhandled errors never crash the Node.js server (verified via `FAIL_NOTIFY`).
 
 ### Practical 9 Features Added:
 - **node-cache**: Server-side in-memory caching engine.
