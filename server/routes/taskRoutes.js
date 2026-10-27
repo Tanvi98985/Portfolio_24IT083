@@ -4,6 +4,8 @@ import Task from '../models/Task.js';
 import authMiddleware from '../middleware/auth.js';
 import { validateTask } from '../middleware/validate.js';
 import cache, { cacheStats } from '../cache.js';
+import taskEvents from '../events.js';
+import { handleTaskCreated } from '../listeners.js';
 
 const router = express.Router();
 
@@ -142,7 +144,18 @@ router.post('/', validateTask, async (req, res, next) => {
     console.log(`[CACHE INVALIDATED] ${allTasksKey}`);
     console.log('========================================\n');
 
-    return res.status(201).json(savedTask);
+    // Demo comparison: synchronous blocking notification if ?mode=sync
+    if (req.query.mode === 'sync') {
+      await handleTaskCreated(savedTask);
+      console.log(`[API] (SYNC) Response sent at ${new Date().toISOString()}`);
+      return res.status(201).json(savedTask);
+    }
+
+    // Default asynchronous event-driven flow: respond to client first, then emit event
+    console.log(`[API] Response sent at ${new Date().toISOString()}`);
+    res.status(201).json(savedTask);
+    taskEvents.emit('task-created', savedTask);
+    return;
   } catch (error) {
     if (error.name === 'ValidationError') {
       return res.status(400).json({ error: error.message });
@@ -234,10 +247,13 @@ router.delete('/:id', async (req, res, next) => {
     console.log(`[CACHE INVALIDATED] ${singleTaskKey}`);
     console.log('========================================\n');
 
-    return res.status(200).json({
+    // Respond to client first, then emit event asynchronously
+    res.status(200).json({
       message: 'Task deleted successfully.',
       id: deletedTask._id,
     });
+    taskEvents.emit('task-deleted', deletedTask);
+    return;
   } catch (error) {
     return next(error);
   }
