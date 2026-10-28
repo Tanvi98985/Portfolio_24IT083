@@ -33,6 +33,8 @@ services:
       - MONGO_URI=mongodb://mongodb:27017/tanvi_projects
       - JWT_SECRET=${JWT_SECRET:-change_me_in_docker}
       - NOTIFICATION_DELAY_MS=${NOTIFICATION_DELAY_MS:-2000}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-2.5-flash}
       - PORT=5000
     depends_on:
       mongodb:

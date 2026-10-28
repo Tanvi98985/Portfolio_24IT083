@@ -5,6 +5,7 @@ import connectDB from './db.js';
 import './listeners.js';
 import taskRoutes from './routes/taskRoutes.js';
 import authRoutes from './routes/authRoutes.js';
+import aiRoutes from './routes/aiRoutes.js';
 
 // Ensure dotenv loads first before process.env is accessed
 dotenv.config();
@@ -31,6 +32,9 @@ app.use('/', authRoutes);
 
 // Mount Task REST API routes (protected with JWT auth middleware)
 app.use('/tasks', taskRoutes);
+
+// Mount AI Assistant routes (protected with JWT auth middleware)
+app.use('/api/ai', aiRoutes);
 
 // Health check / API status route
 app.get('/api/health', (req, res) => {
