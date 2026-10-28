@@ -1,0 +1,35 @@
+name: CI Pipeline
+
+# Trigger the workflow on pushes to the main branch
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out source code from repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Install Node.js 20 LTS runtime (required for Mongoose 9)
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Step 4: Run automated tests in-memory
+      - name: Run automated tests
+        run: npm test
+        env:
+          JWT_SECRET: test_secret
+
+      # Step 5: Build production frontend assets with Vite
+      - name: Build frontend
+        run: npm run build
