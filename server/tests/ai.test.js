@@ -27,6 +27,7 @@ describe('AI API Integration - In-Memory Tests', () => {
 
   // Test 2: Protected request with valid JWT and no API key returns 200 with fallback
   it('POST /api/ai/generate-description with valid JWT and no API key returns 200 fallback', async () => {
+    delete process.env.GEMINI_API_KEY;
     const validToken = jwt.sign(
       { id: '507f1f77bcf86cd799439011' },
       'test_secret'
@@ -39,6 +40,7 @@ describe('AI API Integration - In-Memory Tests', () => {
 
     expect(res.status).toBe(200);
     expect(res.body.fallback).toBe(true);
+    expect(res.body.reason).toBe('not_configured');
     expect(res.body.description).toBe('');
     expect(res.body.message).toContain('not configured');
   });
