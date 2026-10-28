@@ -12,8 +12,10 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Connect to MongoDB Atlas (tanvi_projects database)
-connectDB();
+// Connect to MongoDB Atlas (tanvi_projects database) when not in test mode
+if (process.env.NODE_ENV !== 'test') {
+  connectDB();
+}
 
 app.use(cors({
   origin: '*',
@@ -52,8 +54,10 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
 
 export default app;
