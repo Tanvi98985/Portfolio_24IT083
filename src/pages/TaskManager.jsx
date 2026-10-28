@@ -10,6 +10,7 @@ import {
   logoutUser,
   getAuthToken,
   setOnUnauthorized,
+  generateDescription,
 } from '../api';
 import Spinner from '../components/Spinner';
 import ErrorMessage from '../components/ErrorMessage';
@@ -36,6 +37,12 @@ function TaskManager() {
   const [description, setDescription] = useState('');
   const [formError, setFormError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // AI Assistant States (Practical 13)
+  const [isGeneratingAi, setIsGeneratingAi] = useState(false);
+  const [isAiSuggested, setIsAiSuggested] = useState(false);
+  const [previousDescription, setPreviousDescription] = useState(null);
+  const [aiStatusMessage, setAiStatusMessage] = useState('');
 
   // Item Action States
   const [updatingId, setUpdatingId] = useState(null);
@@ -177,6 +184,9 @@ function TaskManager() {
     setTasks((prev) => [optimisticTask, ...prev]);
     setTitle('');
     setDescription('');
+    setIsAiSuggested(false);
+    setPreviousDescription(null);
+    setAiStatusMessage('');
 
     try {
       const createdTask = await createTask({
@@ -195,6 +205,57 @@ function TaskManager() {
       showToast(`Failed to create task: ${err.message}`, 'error');
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  // Handle AI Task Description Generation (Practical 13)
+  const handleGenerateDescription = async () => {
+    if (!title.trim() || isGeneratingAi || isSubmitting) return;
+
+    setIsGeneratingAi(true);
+    setAiStatusMessage('Generating task description with AI...');
+
+    try {
+      const result = await generateDescription(title.trim());
+
+      if (result.rateLimited) {
+        const msg = result.message || `Please wait ${result.retryAfterSeconds} seconds before generating again for this title.`;
+        setAiStatusMessage(msg);
+        showToast(msg, 'error');
+        return;
+      }
+
+      if (result.fallback) {
+        const msg = result.message || 'AI suggestion is unavailable right now. You can write the description yourself.';
+        setAiStatusMessage(msg);
+        showToast(msg, 'error');
+        return;
+      }
+
+      if (result.description) {
+        setPreviousDescription(description);
+        setDescription(result.description);
+        setIsAiSuggested(true);
+        setAiStatusMessage('AI-generated suggestion. Please review and edit before saving.');
+        showToast('AI suggestion generated! Review and edit before saving.', 'success');
+      }
+    } catch {
+      const msg = 'AI suggestion is unavailable right now. You can write the description yourself.';
+      setAiStatusMessage(msg);
+      showToast(msg, 'error');
+    } finally {
+      setIsGeneratingAi(false);
+    }
+  };
+
+  // Handle Undo AI Description
+  const handleUndoAiDescription = () => {
+    if (previousDescription !== null) {
+      setDescription(previousDescription);
+      setPreviousDescription(null);
+      setIsAiSuggested(false);
+      setAiStatusMessage('Restored previous description.');
+      showToast('Restored previous description.', 'success');
     }
   };
 
@@ -427,22 +488,68 @@ function TaskManager() {
               </div>
 
               <div style={{ marginBottom: '1.2rem' }}>
-                <label
-                  htmlFor="task-description"
-                  style={{ display: 'block', marginBottom: '0.4rem', color: 'var(--navy-dark)', fontWeight: 'bold', fontSize: '0.95rem' }}
-                >
-                  Description (Optional)
-                </label>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+                  <label
+                    htmlFor="task-description"
+                    style={{ color: 'var(--navy-dark)', fontWeight: 'bold', fontSize: '0.95rem' }}
+                  >
+                    Description (Optional)
+                  </label>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                    {previousDescription !== null && (
+                      <button
+                        type="button"
+                        onClick={handleUndoAiDescription}
+                        className="ai-undo-btn"
+                        disabled={isSubmitting || isGeneratingAi}
+                        title="Undo AI suggestion and restore previous description"
+                      >
+                        ↺ Undo
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      onClick={handleGenerateDescription}
+                      disabled={!title.trim() || isGeneratingAi || isSubmitting}
+                      className="ai-generate-btn"
+                      title={!title.trim() ? 'Enter a task title first' : 'Generate description using AI'}
+                    >
+                      {isGeneratingAi ? (
+                        <>
+                          <span className="ai-btn-spinner" aria-hidden="true"></span>
+                          <span>Generating...</span>
+                        </>
+                      ) : (
+                        '✨ Generate description'
+                      )}
+                    </button>
+                  </div>
+                </div>
+
                 <textarea
                   id="task-description"
                   className="search-box"
-                  placeholder="Add details or acceptance criteria..."
+                  placeholder="Add details or acceptance criteria (or click 'Generate description')..."
                   rows="3"
                   value={description}
-                  onChange={(e) => setDescription(e.target.value)}
+                  onChange={(e) => {
+                    setDescription(e.target.value);
+                  }}
                   style={{ width: '100%', maxWidth: '100%', marginBottom: 0, resize: 'vertical', fontFamily: 'inherit' }}
                   disabled={isSubmitting}
                 />
+
+                {/* Accessible screen reader status announcements */}
+                <div aria-live="polite" className="sr-only">
+                  {aiStatusMessage}
+                </div>
+
+                {/* Visible disclaimer when AI suggestion is present */}
+                {isAiSuggested && (
+                  <p className="ai-disclaimer" aria-live="polite">
+                    <strong>ℹ️ Note:</strong> AI-generated suggestion. Please review and edit before saving.
+                  </p>
+                )}
               </div>
 
               <button

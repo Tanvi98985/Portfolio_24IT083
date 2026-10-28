@@ -185,3 +185,40 @@ export const fetchCacheStats = async () => {
   return handleResponse(response);
 };
 
+/* ==========================================================================
+   AI Integration Endpoints (Practical 13)
+   ========================================================================== */
+
+/**
+ * Generate a task description suggestion from the title using Gemini API
+ * @param {string} title - Task title
+ * @returns {Promise<Object>} Response data for 200 and 429 status codes
+ */
+export const generateDescription = async (title) => {
+  const response = await fetch(`${BASE_URL}/api/ai/generate-description`, {
+    method: 'POST',
+    headers: getHeaders(true),
+    body: JSON.stringify({ title }),
+  });
+
+  if (response.status === 401 && onUnauthorizedCallback) {
+    onUnauthorizedCallback();
+  }
+
+  // Return parsed JSON for both 200 OK and 429 Rate Limited responses
+  if (response.status === 200 || response.status === 429) {
+    return response.json();
+  }
+
+  let errorMessage = `Request failed with status ${response.status}`;
+  try {
+    const errorData = await response.json();
+    if (errorData && errorData.error) {
+      errorMessage = errorData.error;
+    }
+  } catch {
+    // Keep generic error message if JSON parsing fails
+  }
+  throw new Error(errorMessage);
+};
+
