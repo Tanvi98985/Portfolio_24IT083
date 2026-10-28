@@ -1,8 +1,16 @@
 
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import dns from 'dns';
 
 dotenv.config();
+
+// Fix for Windows / ISP DNS resolvers blocking SRV records (querySrv ECONNREFUSED)
+try {
+  dns.setServers(['8.8.8.8', '1.1.1.1']);
+} catch {
+  // Gracefully fallback to default system DNS
+}
 
 const connectDB = async () => {
   try {
