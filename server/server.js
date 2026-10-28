@@ -61,6 +61,9 @@ app.use((err, req, res, next) => {
 if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
+    const isConfigured = Boolean(process.env.GEMINI_API_KEY);
+    const model = process.env.GEMINI_MODEL || 'gemini-flash-lite-latest';
+    console.log(`[AI] Gemini configured: ${isConfigured} (model: ${model})`);
   });
 }
 

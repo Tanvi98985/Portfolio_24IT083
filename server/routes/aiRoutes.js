@@ -35,6 +35,7 @@ router.post('/generate-description', async (req, res) => {
       return res.status(200).json({
         description: '',
         fallback: true,
+        reason: 'not_configured',
         message: 'AI suggestions are not configured.',
       });
     }
@@ -58,12 +59,12 @@ router.post('/generate-description', async (req, res) => {
     // Record rate limit timestamp only when attempting the AI call
     rateLimitMap.set(rateLimitKey, now);
 
-    // 4. Configure Gemini API call
-    const model = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+    // 4. Configure Gemini API call (default to working model from ListModels)
+    const model = process.env.GEMINI_MODEL || 'gemini-flash-lite-latest';
     const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
 
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 8000); // 8-second timeout
+    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15-second timeout
 
     // Sanitize and encapsulate task title inside delimiters to prevent prompt injection
     const promptText =
@@ -83,7 +84,7 @@ router.post('/generate-description', async (req, res) => {
       ],
       generationConfig: {
         temperature: 0.4,
-        maxOutputTokens: 150,
+        maxOutputTokens: 512, // Sufficient tokens so response is not cut to empty
       },
     };
 
@@ -92,21 +93,47 @@ router.post('/generate-description', async (req, res) => {
       geminiResponse = await fetch(geminiUrl, {
         method: 'POST',
         headers: {
-          'x-goog-api-key': apiKey, // API key in header, not URL
+          'x-goog-api-key': apiKey, // API key in header, not in URL
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(payload),
         signal: controller.signal,
       });
+    } catch (fetchError) {
+      clearTimeout(timeoutId);
+      const isTimeout = fetchError.name === 'AbortError' || fetchError.message?.toLowerCase().includes('abort');
+      const reason = isTimeout ? 'timeout' : 'network_error';
+      const statusLabel = isTimeout ? 'timeout' : 'network_error';
+      console.error(`[AI] Gemini request failed: status=${statusLabel} reason=${reason} message="${fetchError.message || 'Fetch failed'}"`);
+      return res.status(200).json({
+        description: '',
+        fallback: true,
+        reason,
+        message: 'AI suggestion is unavailable right now. You can write the description yourself.',
+      });
     } finally {
       clearTimeout(timeoutId);
     }
 
+    // Map non-2xx provider HTTP status codes to failure reason
     if (!geminiResponse.ok) {
-      console.error(`[AI] Provider responded with HTTP status ${geminiResponse.status}`);
+      const errorData = await geminiResponse.json().catch(() => null);
+      const providerMsg = errorData?.error?.message || geminiResponse.statusText || 'Provider request failed';
+
+      let reason = 'provider_error';
+      if ([400, 401, 403].includes(geminiResponse.status)) {
+        reason = 'invalid_key';
+      } else if (geminiResponse.status === 404) {
+        reason = 'model_unavailable';
+      } else if (geminiResponse.status === 429) {
+        reason = 'quota_exceeded';
+      }
+
+      console.error(`[AI] Gemini request failed: status=${geminiResponse.status} reason=${reason} message="${providerMsg}"`);
       return res.status(200).json({
         description: '',
         fallback: true,
+        reason,
         message: 'AI suggestion is unavailable right now. You can write the description yourself.',
       });
     }
@@ -115,10 +142,11 @@ router.post('/generate-description', async (req, res) => {
     const candidateText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
 
     if (!candidateText || typeof candidateText !== 'string' || !candidateText.trim()) {
-      console.error('[AI] Empty or malformed content in Gemini response');
+      console.error('[AI] Gemini request failed: status=200 reason=empty_response message="Empty or malformed content in Gemini response"');
       return res.status(200).json({
         description: '',
         fallback: true,
+        reason: 'empty_response',
         message: 'AI suggestion is unavailable right now. You can write the description yourself.',
       });
     }
@@ -131,11 +159,13 @@ router.post('/generate-description', async (req, res) => {
       fallback: false,
     });
   } catch (error) {
-    // Log safe error message without API key or full prompt
-    console.error('[AI] Gemini generation failed:', error.message || 'Unknown error');
+    // Catch-all failure mapping
+    const reason = error.name === 'AbortError' ? 'timeout' : 'provider_error';
+    console.error(`[AI] Gemini request failed: status=500 reason=${reason} message="${error.message || 'Unknown error'}"`);
     return res.status(200).json({
       description: '',
       fallback: true,
+      reason,
       message: 'AI suggestion is unavailable right now. You can write the description yourself.',
     });
   }
