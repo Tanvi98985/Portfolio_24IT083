@@ -1,185 +1,530 @@
 # Portfolio_24IT083
 
-A personal portfolio website built with React and Vite to showcase my projects, skills, and contact information. The application also integrates the GitHub REST API to dynamically display my public repositories.
+A full-stack portfolio and task management project built with React, Vite, Express, and MongoDB. The repository combines a personal portfolio website with a protected task manager that demonstrates authentication, database access, API design, caching, asynchronous processing, and Docker-based deployment.
+
+## Table of Contents
+
+- [Project Overview](#project-overview)
+- [Main Features Implemented](#main-features-implemented)
+- [Technology Stack](#technology-stack)
+- [Project Structure](#project-structure)
+- [System Architecture](#system-architecture)
+- [Prerequisites](#prerequisites)
+- [Environment Setup](#environment-setup)
+- [Local Development Setup](#local-development-setup)
+- [Docker Setup](#docker-setup)
+- [Frontend and Backend URLs](#frontend-and-backend-urls)
+- [API Documentation](#api-documentation)
+- [Database Configuration](#database-configuration)
+- [Authentication and Security](#authentication-and-security)
+- [Testing and Verification](#testing-and-verification)
+- [Practical Evidence and Documentation](#practical-evidence-and-documentation)
+- [Practical Progress (1-11)](#practical-progress-1-11)
+- [Practical 12 and 13](#practical-12-and-13)
+- [Known Limitations and Future Improvements](#known-limitations-and-future-improvements)
+- [Author](#author)
 
 ---
 
-## Features
+## Project Overview
 
-- Responsive portfolio website
+This project is a combined web application developed as a portfolio website and a task management system for Advanced Web Development Frameworks practicals. It includes:
+
+- a responsive personal portfolio built with React and Vite
+- GitHub repository data integration through the GitHub REST API
+- a protected task manager with user registration and login
+- JWT-based authentication and protected CRUD APIs
+- MongoDB persistence for users and tasks
+- server-side caching for repeated read operations
+- event-driven asynchronous processing for task lifecycle events
+- Docker and Docker Compose setup for containerized deployment
+
+The source code in the repository is the authoritative source of the implemented features. Practical documentation is available in [docs/](docs/), including [docs/practical-8.md](docs/practical-8.md), [docs/practical-9.md](docs/practical-9.md), [docs/practical-10.md](docs/practical-10.md), and [docs/practical-11.md](docs/practical-11.md).
+
+---
+
+## Main Features Implemented
+
+### Portfolio features
+
+- Responsive portfolio layout and styling
 - Multi-page navigation using React Router
-- Reusable React components
-- Dynamic GitHub repository listing
-- Search repositories by name
-- Loading spinner while fetching data
-- Error handling with retry option
-- Displays repository name, repository link, and star count
-- Clean and modern user interface
+- About, projects, home, contact, and 404 pages
+- Dynamic GitHub repository listing through the GitHub REST API
+- Search and loading/error states during data retrieval
+- Reusable UI components for cards, headers, footer, and navigation
+
+### Task management features
+
+- User registration and login
+- Password hashing using bcryptjs
+- JWT authentication with bearer tokens
+- CRUD endpoints for tasks
+- Task completion toggle and delete confirmation flows
+- Protected routes and user-specific data access
+- Cache hit/miss tracking for performance analysis
+- Event-driven notification simulation for task lifecycle events
+- Dockerized frontend, backend, and MongoDB services
 
 ---
 
-## Technologies Used
+## Technology Stack
 
-- React
-- Vite
-- JavaScript (ES6+)
-- HTML5
-- CSS3
-- React Router
-- GitHub REST API
-
----
-
-## GitHub API
-
-The application fetches public repositories using the GitHub REST API.
-
-**API Endpoint**
-
-```
-https://api.github.com/users/Tanvi98985/repos
-```
-
----
-
-## Installation
-
-Clone the repository:
-
-```bash
-git clone <repository-url>
-```
-
-Move into the project directory:
-
-```bash
-cd Portfolio_24IT083
-```
-
-Install dependencies:
-
-```bash
-npm install
-```
-
-Start the development server:
-
-```bash
-npm run dev
-```
-
-Open the application in your browser:
-
-```
-http://localhost:5173
-```
-
----
-
-## Run with Docker
-
-The entire full-stack application (React frontend, Node.js backend, and MongoDB database) can be launched simultaneously using Docker Compose with zero manual setup.
-
-### Prerequisites
-- Docker Engine installed:
-  ```bash
-  docker --version
-  ```
-- Docker Compose v2 installed:
-  ```bash
-  docker compose version
-  ```
-
-### Quick Start
-Build and start all 3 services in the background:
-```bash
-docker compose up --build
-```
-Or in detached mode:
-```bash
-docker compose up --build -d
-```
-
-### Application URLs
-- **Frontend (React UI via Nginx)**: [http://localhost:5173](http://localhost:5173)
-- **Backend Healthcheck API**: [http://localhost:5000/api/health](http://localhost:5000/api/health)
-- **Backend Tasks API**: [http://localhost:5000/tasks](http://localhost:5000/tasks)
-
-### Stopping Containers
-Stop all running services without deleting database records:
-```bash
-docker compose down
-```
-
-### Reset / Wipe Database Volume
-Stop all services and completely wipe persistent MongoDB storage:
-```bash
-docker compose down -v
-```
+| Technology | Purpose |
+|---|---|
+| React 18 | Frontend user interface and component-driven portfolio design |
+| Vite | Fast frontend build and development tooling |
+| React Router | Client-side routing across portfolio and task manager pages |
+| Express 5 | API server for backend routes |
+| Node.js 20 | JavaScript runtime for the server |
+| MongoDB + Mongoose 9 | NoSQL database and ODM for users and tasks |
+| JWT | Authentication and authorization for protected routes |
+| bcryptjs | Password hashing for secure user storage |
+| node-cache | In-memory data cache for repeated read operations |
+| EventEmitter | Asynchronous task lifecycle event handling |
+| CORS | Cross-origin sharing for frontend-backend communication |
+| Docker + Docker Compose | Containerized orchestration for full-stack deployment |
+| Nginx | Production serving for the frontend static bundle |
+| dotenv | Environment variable loading |
+| GitHub REST API | Fetching public repository data for the portfolio |
 
 ---
 
 ## Project Structure
 
-```
-src
-│── components
-│   ├── About.jsx
-│   ├── ErrorMessage.jsx
-│   ├── Footer.jsx
-│   ├── Header.jsx
-│   ├── NavBar.jsx
-│   ├── ProjectCard.jsx
-│   ├── Skills.jsx
-│   └── Spinner.jsx
-│
-│── pages
-│   ├── Contact.jsx
-│   ├── Home.jsx
-│   ├── NotFound.jsx
-│   └── Projects.jsx
-│
-├── App.jsx
-├── App.css
-├── index.css
-└── main.jsx
+```text
+portfolio_24IT083/
+├── .dockerignore
+├── .env.example
+├── Dockerfile.backend
+├── Dockerfile.frontend
+├── README.md
+├── docker-compose.yml
+├── index.html
+├── nginx.conf
+├── package.json
+├── vite.config.js
+├── docs/
+│   ├── practical-8.md
+│   ├── practical-9.md
+│   ├── practical-10.md
+│   └── practical-11.md
+├── server/
+│   ├── cache.js
+│   ├── db.js
+│   ├── events.js
+│   ├── listeners.js
+│   ├── server.js
+│   ├── middleware/
+│   │   ├── auth.js
+│   │   └── validate.js
+│   ├── models/
+│   │   ├── Task.js
+│   │   └── User.js
+│   └── routes/
+│       ├── authRoutes.js
+│       └── taskRoutes.js
+├── src/
+│   ├── App.css
+│   ├── App.jsx
+│   ├── api.js
+│   ├── index.css
+│   ├── main.jsx
+│   ├── components/
+│   │   ├── About.jsx
+│   │   ├── ConfirmModal.jsx
+│   │   ├── ErrorMessage.jsx
+│   │   ├── Footer.jsx
+│   │   ├── Header.jsx
+│   │   ├── NavBar.jsx
+│   │   ├── ProjectCard.jsx
+│   │   ├── Skills.jsx
+│   │   ├── Spinner.jsx
+│   │   └── Toast.jsx
+│   └── pages/
+│       ├── Contact.jsx
+│       ├── Home.jsx
+│       ├── NotFound.jsx
+│       ├── Projects.jsx
+│       └── TaskManager.jsx
+├── dist/                     # generated by Vite build
+└── node_modules/             # installed dependencies
 ```
 
 ---
 
-## Practical Documentation
+## System Architecture
 
-- [Practical 8: Route-Based Lazy Loading & Performance Optimization](docs/practical-8.md)
-- [Practical 9: In-Memory Caching and Query Optimization](docs/practical-9.md)
-- [Practical 10: Asynchronous Processing with Event-Driven Architecture](docs/practical-10.md)
-- [Practical 11: Containerization with Docker and Docker Compose](docs/practical-11.md)
+The project follows a three-layer architecture:
 
-### Practical 11 Features Added:
-- **Full-Stack Containerization**: Dockerized React (Vite/Nginx), Node.js (Express), and MongoDB 7 into isolated microservices.
-- **Multi-Stage Frontend Build**: Minimized image size using `node:20-alpine` build stage and slim `nginx:alpine` production server.
-- **Nginx SPA Routing**: Custom `nginx.conf` utilizing `try_files $uri /index.html;` to ensure direct browser refresh works across all React Router routes.
-- **Inter-Service DNS Networking**: Private bridge network (`app-network`) allowing backend to reliably connect to `mongodb://mongodb:27017/tanvi_projects`.
-- **Persistent Storage**: Named volume (`mongo-data`) protecting database records across container stops and restarts.
-- **Container Healthchecks**: Configured health probes (`mongosh ping` and `wget /api/health`) enforcing strict startup order via `condition: service_healthy`.
+```text
+Browser / User
+     |
+     v
+React Frontend (Vite + React Router)
+     |
+     | HTTP requests
+     v
+Express Backend (Node.js + JWT auth + API routes)
+     |
+     +--> MongoDB (users, tasks)
+     +--> In-memory cache (node-cache)
+     +--> Event emitter listeners (task-created, task-deleted)
+```
 
-### Practical 10 Features Added:
-- **Node.js EventEmitter**: Native publish-subscribe event-driven architecture using built-in `events` module.
-- **Asynchronous Decoupling**: API responses return immediately to the client without waiting for long-running notification or audit processes.
-- **Task Domain Events**: Dedicated listeners for `task-created`, `task-deleted`, and `error`.
-- **User Association**: Resolves user email from MongoDB asynchronously during notification delivery.
-- **Simulated Notification Delay**: Configurable `NOTIFICATION_DELAY_MS` (default 2000 ms) showcasing background non-blocking execution.
-- **Sync vs Async Comparison**: `?mode=sync` testing mode demonstrating an 88x latency improvement (~23 ms vs ~2028 ms).
-- **Error Resilience**: Catches and forwards event errors so unhandled errors never crash the Node.js server (verified via `FAIL_NOTIFY`).
+### Frontend to backend workflow
 
-### Practical 9 Features Added:
-- **node-cache**: Server-side in-memory caching engine.
-- **60-second TTL**: Automatic time-to-live expiration for cached tasks.
-- **User-Specific Caching**: Isolated cache keys (`all_tasks_${userId}`) ensuring full user privacy.
-- **Single-Task Caching**: Cached individual task lookup (`GET /tasks/:id`) with key `task_${userId}_${taskId}`.
-- **Cache Invalidation**: Automatic cache deletion upon `POST`, `PUT`, and `DELETE` writes after successful database operations.
-- **Cache Hit/Miss Counter**: In-memory counters tracking cache efficiency.
-- **Cache Statistics Endpoint**: Protected debug endpoint `GET /tasks/cache/stats`.
-- **Performance Testing**: Measured cached vs. uncached API latency.
+1. The React frontend loads the portfolio and task manager pages.
+2. The task manager sends login and registration requests to the `/auth` endpoints.
+3. Successful login stores a JWT in localStorage and sends the token with further API calls.
+4. Protected task requests are made to `/tasks` on the backend.
+5. The backend validates the JWT, reads or writes data in MongoDB, and returns JSON responses.
+
+### Backend to database workflow
+
+- [server/db.js](server/db.js) establishes the MongoDB connection using `MONGO_URI` or a local fallback.
+- [server/models/User.js](server/models/User.js) stores user records in the `users` collection.
+- [server/models/Task.js](server/models/Task.js) stores task records in the `tasks` collection.
+- Both collections are part of the `tanvi_projects` database used in this project.
+
+---
+
+## Prerequisites
+
+Before running locally, ensure the following are installed:
+
+- Node.js 20+
+- npm
+- MongoDB locally or access to a MongoDB Atlas cluster
+- Docker Desktop for containerized use
+- Git
+
+For Windows PowerShell, commands can be run from the project root directly.
+
+---
+
+## Environment Setup
+
+The project includes [.env.example](.env.example). Create a local `.env` file in the project root using it as a template.
+
+Example structure:
+
+```env
+PORT=5000
+MONGO_URI=mongodb://127.0.0.1:27017/tanvi_projects
+DB_NAME=tanvi_projects
+JWT_SECRET=your_jwt_secret_key_here
+NOTIFICATION_DELAY_MS=2000
+```
+
+Important notes:
+
+- Never commit the real `.env` file.
+- The repository includes [.dockerignore](.dockerignore), which excludes `.env` from Docker image builds.
+- In Docker Compose, the backend internally connects to MongoDB using `mongodb://mongodb:27017/tanvi_projects`.
+
+---
+
+## Local Development Setup
+
+From the project root, install dependencies and run the app:
+
+```powershell
+cd "E:\5th sem\AWDF\portfolio_24IT083"
+npm install
+npm run dev
+```
+
+This starts the Vite frontend development server.
+
+To run the frontend and backend together:
+
+```powershell
+cd "E:\5th sem\AWDF\portfolio_24IT083"
+npm install
+npm run dev:all
+```
+
+This launches both:
+
+- frontend: http://localhost:5173
+- backend: http://localhost:5000
+
+If you want to run only the backend server:
+
+```powershell
+cd "E:\5th sem\AWDF\portfolio_24IT083"
+npm run server
+```
+
+---
+
+## Docker Setup
+
+Docker configuration is present in the project root:
+
+- [Dockerfile.backend](Dockerfile.backend)
+- [Dockerfile.frontend](Dockerfile.frontend)
+- [docker-compose.yml](docker-compose.yml)
+- [nginx.conf](nginx.conf)
+- [.dockerignore](.dockerignore)
+
+### Docker architecture
+
+This project uses:
+
+- React/Vite frontend built in a multi-stage Docker build
+- Nginx to serve the production frontend bundle on port 5173
+- Node.js/Express backend on port 5000
+- MongoDB 7 official image on port 27017
+- Docker bridge network named `app-network`
+- Named volume `mongo-data_24it083` for database persistence
+
+### Docker Compose configuration summary
+
+From [docker-compose.yml](docker-compose.yml):
+
+- `mongodb` service uses `mongo:7`
+- `backend` service uses `Dockerfile.backend`
+- `frontend` service uses `Dockerfile.frontend`
+- `backend` connects to MongoDB via `mongodb://mongodb:27017/tanvi_projects`
+- `frontend` exposes port `5173:5173`
+- `backend` exposes port `5000:5000`
+- `mongodb` exposes port `27017:27017`
+
+### Build and start with Docker Compose
+
+```powershell
+cd "E:\5th sem\AWDF\portfolio_24IT083"
+docker compose up --build
+```
+
+This builds and starts all three services.
+
+### Stop and restart services
+
+```powershell
+docker compose down
+docker compose up --build
+docker compose down -v
+```
+
+The `down -v` option removes the named volume and resets the database data.
+
+---
+
+## Frontend and Backend URLs
+
+- Frontend URL: http://localhost:5173
+- Backend health endpoint: http://localhost:5000/api/health
+- Backend API base URL: http://localhost:5000
+
+---
+
+## API Documentation
+
+The API is implemented in the backend routes and is protected by JWT middleware unless otherwise noted.
+
+### Authentication routes
+
+| Method | Route | Description |
+|---|---|---|
+| POST | `/auth/register` | Register a new user |
+| POST | `/register` | Root-level alias for registration |
+| POST | `/auth/login` | Login and return JWT |
+| POST | `/login` | Root-level alias for login |
+| GET | `/auth/me` | Get current authenticated user |
+| GET | `/me` | Root-level alias for current user |
+
+### Task routes
+
+| Method | Route | Description |
+|---|---|---|
+| GET | `/tasks` | Fetch all tasks for the authenticated user |
+| GET | `/tasks/:id` | Fetch one task by ID |
+| POST | `/tasks` | Create a new task |
+| PUT | `/tasks/:id` | Update task fields |
+| DELETE | `/tasks/:id` | Delete a task |
+| GET | `/tasks/cache/stats` | View in-memory cache hit/miss stats |
+
+### Health check
+
+| Method | Route | Description |
+|---|---|---|
+| GET | `/api/health` | Health check endpoint for the backend |
+
+Actual route definitions are in [server/server.js](server/server.js), with implementation in [server/routes/authRoutes.js](server/routes/authRoutes.js) and [server/routes/taskRoutes.js](server/routes/taskRoutes.js).
+
+---
+
+## Database Configuration
+
+The project uses MongoDB with Mongoose.
+
+### Local development
+
+The default local connection is:
+
+```env
+MONGO_URI=mongodb://127.0.0.1:27017/tanvi_projects
+```
+
+The database name is `tanvi_projects`.
+
+### Docker Compose
+
+Inside the Docker network, the backend connects to the MongoDB service using:
+
+```env
+MONGO_URI=mongodb://mongodb:27017/tanvi_projects
+```
+
+### Persistence
+
+The Compose file defines a named Docker volume:
+
+```yaml
+volumes:
+  mongo-data:
+    name: mongo-data_24it083
+```
+
+This persists MongoDB data under `/data/db` across container restarts.
+
+### Collections used
+
+- `users` — stores registered user records
+- `tasks` — stores user task documents
+
+The schemas are defined in [server/models/User.js](server/models/User.js) and [server/models/Task.js](server/models/Task.js).
+
+---
+
+## Authentication and Security
+
+Authentication is implemented with JWT and bcrypt.
+
+### Security features
+
+- password hashing with `bcryptjs`
+- secure JWT signing using `JWT_SECRET`
+- protected task routes via `authMiddleware`
+- validation checks before creating users or tasks
+- bearer token usage for authenticated requests
+- 401 responses for invalid, expired, or malformed tokens
+
+### Validation logic
+
+The middleware in [server/middleware/validate.js](server/middleware/validate.js) validates:
+
+- email format
+- minimum password length
+- required task title values
+- invalid or empty task data
+
+---
+
+## Testing and Verification
+
+The repository does not include a formal automated test suite, but the application can be verified in practical ways:
+
+### Local verification
+
+1. Start backend and frontend:
+
+```powershell
+npm run dev:all
+```
+
+2. Open the frontend at http://localhost:5173
+3. Register a user and log in
+4. Create a task and confirm it appears in the task list
+5. Toggle completion, delete a task, and confirm cache invalidation logs in the backend console
+6. Check the health endpoint at http://localhost:5000/api/health
+
+### Docker verification
+
+```powershell
+docker compose up --build
+```
+
+Then confirm:
+
+- frontend is reachable on http://localhost:5173
+- backend is reachable on http://localhost:5000/api/health
+- MongoDB accepts connections and the named volume is mounted
+
+### Cache verification
+
+Use the protected endpoint:
+
+```text
+GET /tasks/cache/stats
+```
+
+This returns hit/miss values for the in-memory cache layer.
+
+---
+
+## Practical Evidence and Documentation
+
+The repository contains practical documentation files in [docs/](docs/):
+
+- [docs/practical-8.md](docs/practical-8.md) — route-based lazy loading and performance optimization
+- [docs/practical-9.md](docs/practical-9.md) — in-memory caching and query optimization
+- [docs/practical-10.md](docs/practical-10.md) — event-driven asynchronous processing
+- [docs/practical-11.md](docs/practical-11.md) — Docker and Docker Compose containerization
+
+No image files such as `.png`, `.jpg`, or `.svg` were found under [docs/](docs/). The practical evidence in this repository is therefore represented by the Markdown documentation files rather than screenshot assets.
+
+---
+
+## Practical Progress (1-11)
+
+The repository contains direct evidence for the later practicals and a complete combined application that reflects the integrated project progression.
+
+| Practical | Evidence in repository | Status |
+|---|---|---|
+| 1 | Portfolio foundation and front-end structure | Implemented in source code |
+| 2 | React app structure and component-based UI | Implemented in source code |
+| 3 | Multi-page navigation and portfolio sections | Implemented in source code |
+| 4 | API integration and project data fetching | Implemented in source code |
+| 5 | Task management UI foundation | Implemented in source code |
+| 6 | CRUD workflow and frontend state logic | Implemented in source code |
+| 7 | Backend integration and task persistence foundation | Implemented in source code |
+| 8 | Route-based lazy loading and performance optimization | Documented in [docs/practical-8.md](docs/practical-8.md) |
+| 9 | In-memory caching and query optimization | Documented in [docs/practical-9.md](docs/practical-9.md) |
+| 10 | Event-driven asynchronous processing | Documented in [docs/practical-10.md](docs/practical-10.md) |
+| 11 | Docker and Docker Compose deployment | Documented in [docs/practical-11.md](docs/practical-11.md) |
+
+This project therefore represents the combined result of multi-practical full-stack development, with practical 8–11 documented in the repository.
+
+---
+
+## Practical 12 and 13
+
+Practical 12 and Practical 13 are not evidenced in the repository as implemented or documented artifacts.
+
+At the current time, the project contains direct implementation and documentation evidence up to Practical 11 only. No dedicated `practical-12` or `practical-13` files or implementation markers were found in the source tree.
+
+---
+
+## Known Limitations and Future Improvements
+
+- The application uses a single local in-memory cache instance, which is suitable for single-node deployments but not for horizontal scaling across multiple backend instances.
+- The backend uses the Node.js event system for notification simulation; production systems would typically use external queues or message brokers.
+- Frontend and backend default to localhost URLs; environment-specific deployment may require additional configuration.
+- The project is educational and practical-focused rather than a production-grade enterprise system.
+- Earlier practical stages are evident in the combined codebase but are not fully isolated into separate markdown docs for each numbered practical.
+
+Potential future improvements:
+
+- add automated testing with Vitest or Jest
+- add pagination and filtering for tasks
+- add user profile management
+- improve Docker health checks and CI/CD automation
+- add Redis for distributed caching in production deployments
+- add real email or notification backend integration
 
 ---
 
