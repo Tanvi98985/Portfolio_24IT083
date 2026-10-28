@@ -73,23 +73,23 @@ The source code in the repository is the authoritative source of the implemented
 
 ## Technology Stack
 
-| Technology | Purpose |
-|---|---|
-| React 18 | Frontend user interface and component-driven portfolio design |
-| Vite | Fast frontend build and development tooling |
-| React Router | Client-side routing across portfolio and task manager pages |
-| Express 5 | API server for backend routes |
-| Node.js 20 | JavaScript runtime for the server |
-| MongoDB + Mongoose 9 | NoSQL database and ODM for users and tasks |
-| JWT | Authentication and authorization for protected routes |
-| bcryptjs | Password hashing for secure user storage |
-| node-cache | In-memory data cache for repeated read operations |
-| EventEmitter | Asynchronous task lifecycle event handling |
-| CORS | Cross-origin sharing for frontend-backend communication |
-| Docker + Docker Compose | Containerized orchestration for full-stack deployment |
-| Nginx | Production serving for the frontend static bundle |
-| dotenv | Environment variable loading |
-| GitHub REST API | Fetching public repository data for the portfolio |
+| Technology              | Purpose                                                       |
+| ----------------------- | ------------------------------------------------------------- |
+| React 18                | Frontend user interface and component-driven portfolio design |
+| Vite                    | Fast frontend build and development tooling                   |
+| React Router            | Client-side routing across portfolio and task manager pages   |
+| Express 5               | API server for backend routes                                 |
+| Node.js 20              | JavaScript runtime for the server                             |
+| MongoDB + Mongoose 9    | NoSQL database and ODM for users and tasks                    |
+| JWT                     | Authentication and authorization for protected routes         |
+| bcryptjs                | Password hashing for secure user storage                      |
+| node-cache              | In-memory data cache for repeated read operations             |
+| EventEmitter            | Asynchronous task lifecycle event handling                    |
+| CORS                    | Cross-origin sharing for frontend-backend communication       |
+| Docker + Docker Compose | Containerized orchestration for full-stack deployment         |
+| Nginx                   | Production serving for the frontend static bundle             |
+| dotenv                  | Environment variable loading                                  |
+| GitHub REST API         | Fetching public repository data for the portfolio             |
 
 ---
 
@@ -330,31 +330,31 @@ The API is implemented in the backend routes and is protected by JWT middleware 
 
 ### Authentication routes
 
-| Method | Route | Description |
-|---|---|---|
-| POST | `/auth/register` | Register a new user |
-| POST | `/register` | Root-level alias for registration |
-| POST | `/auth/login` | Login and return JWT |
-| POST | `/login` | Root-level alias for login |
-| GET | `/auth/me` | Get current authenticated user |
-| GET | `/me` | Root-level alias for current user |
+| Method | Route            | Description                       |
+| ------ | ---------------- | --------------------------------- |
+| POST   | `/auth/register` | Register a new user               |
+| POST   | `/register`      | Root-level alias for registration |
+| POST   | `/auth/login`    | Login and return JWT              |
+| POST   | `/login`         | Root-level alias for login        |
+| GET    | `/auth/me`       | Get current authenticated user    |
+| GET    | `/me`            | Root-level alias for current user |
 
 ### Task routes
 
-| Method | Route | Description |
-|---|---|---|
-| GET | `/tasks` | Fetch all tasks for the authenticated user |
-| GET | `/tasks/:id` | Fetch one task by ID |
-| POST | `/tasks` | Create a new task |
-| PUT | `/tasks/:id` | Update task fields |
-| DELETE | `/tasks/:id` | Delete a task |
-| GET | `/tasks/cache/stats` | View in-memory cache hit/miss stats |
+| Method | Route                | Description                                |
+| ------ | -------------------- | ------------------------------------------ |
+| GET    | `/tasks`             | Fetch all tasks for the authenticated user |
+| GET    | `/tasks/:id`         | Fetch one task by ID                       |
+| POST   | `/tasks`             | Create a new task                          |
+| PUT    | `/tasks/:id`         | Update task fields                         |
+| DELETE | `/tasks/:id`         | Delete a task                              |
+| GET    | `/tasks/cache/stats` | View in-memory cache hit/miss stats        |
 
 ### Health check
 
-| Method | Route | Description |
-|---|---|---|
-| GET | `/api/health` | Health check endpoint for the backend |
+| Method | Route         | Description                           |
+| ------ | ------------- | ------------------------------------- |
+| GET    | `/api/health` | Health check endpoint for the backend |
 
 Actual route definitions are in [server/server.js](server/server.js), with implementation in [server/routes/authRoutes.js](server/routes/authRoutes.js) and [server/routes/taskRoutes.js](server/routes/taskRoutes.js).
 
@@ -440,6 +440,7 @@ npm test
 ```
 
 The test suite in [server/tests/api.test.js](server/tests/api.test.js) validates:
+
 - `GET /api/health` returns status 200 with `{ "status": "ok" }`
 - `GET /tasks` without authorization returns 401 Unauthorized
 - `GET /tasks` with an invalid/tampered token returns 401 Unauthorized
@@ -491,6 +492,7 @@ This returns hit/miss values for the in-memory cache layer.
 The project implements a continuous integration (CI) pipeline using **GitHub Actions** defined in [.github/workflows/ci.yml](.github/workflows/ci.yml).
 
 ### Workflow Triggers & Jobs
+
 - **Trigger**: Every `push` to the `main` branch.
 - **Runner**: `ubuntu-latest`
 - **Node Runtime**: Node.js 20 LTS (required for Mongoose 9 and Dotenv 17)
@@ -502,7 +504,9 @@ The project implements a continuous integration (CI) pipeline using **GitHub Act
   5. **Build Frontend**: Compiles production React assets via `npm run build` using Vite.
 
 ### Running Tests Locally
+
 Before pushing code, run tests locally using:
+
 ```bash
 npm test
 ```
@@ -527,20 +531,20 @@ No image files such as `.png`, `.jpg`, or `.svg` were found under [docs/](docs/)
 
 The repository contains direct evidence for the later practicals and a complete combined application that reflects the integrated project progression.
 
-| Practical | Evidence in repository | Status |
-|---|---|---|
-| 1 | Portfolio foundation and front-end structure | Implemented in source code |
-| 2 | React app structure and component-based UI | Implemented in source code |
-| 3 | Multi-page navigation and portfolio sections | Implemented in source code |
-| 4 | API integration and project data fetching | Implemented in source code |
-| 5 | Task management UI foundation | Implemented in source code |
-| 6 | CRUD workflow and frontend state logic | Implemented in source code |
-| 7 | Backend integration and task persistence foundation | Implemented in source code |
-| 8 | Route-based lazy loading and performance optimization | Documented in [docs/practical-8.md](docs/practical-8.md) |
-| 9 | In-memory caching and query optimization | Documented in [docs/practical-9.md](docs/practical-9.md) |
-| 10 | Event-driven asynchronous processing | Documented in [docs/practical-10.md](docs/practical-10.md) |
-| 11 | Docker and Docker Compose deployment | Documented in [docs/practical-11.md](docs/practical-11.md) |
-| 12 | CI/CD Pipeline with GitHub Actions | Documented in [docs/practical-12.md](docs/practical-12.md) |
+| Practical | Evidence in repository                                | Status                                                     |
+| --------- | ----------------------------------------------------- | ---------------------------------------------------------- |
+| 1         | Portfolio foundation and front-end structure          | Implemented in source code                                 |
+| 2         | React app structure and component-based UI            | Implemented in source code                                 |
+| 3         | Multi-page navigation and portfolio sections          | Implemented in source code                                 |
+| 4         | API integration and project data fetching             | Implemented in source code                                 |
+| 5         | Task management UI foundation                         | Implemented in source code                                 |
+| 6         | CRUD workflow and frontend state logic                | Implemented in source code                                 |
+| 7         | Backend integration and task persistence foundation   | Implemented in source code                                 |
+| 8         | Route-based lazy loading and performance optimization | Documented in [docs/practical-8.md](docs/practical-8.md)   |
+| 9         | In-memory caching and query optimization              | Documented in [docs/practical-9.md](docs/practical-9.md)   |
+| 10        | Event-driven asynchronous processing                  | Documented in [docs/practical-10.md](docs/practical-10.md) |
+| 11        | Docker and Docker Compose deployment                  | Documented in [docs/practical-11.md](docs/practical-11.md) |
+| 12        | CI/CD Pipeline with GitHub Actions                    | Documented in [docs/practical-12.md](docs/practical-12.md) |
 
 This project therefore represents the combined result of multi-practical full-stack development, with practicals 8–12 documented in the repository.
 
