@@ -1,5 +1,7 @@
 # Portfolio_24IT083
 
+![CI Pipeline](https://github.com/Tanvi98985/Portfolio_24IT083/actions/workflows/ci.yml/badge.svg)
+
 A full-stack portfolio and task management project built with React, Vite, Express, and MongoDB. The repository combines a personal portfolio website with a protected task manager that demonstrates authentication, database access, API design, caching, asynchronous processing, and Docker-based deployment.
 
 ## Table of Contents
@@ -18,9 +20,10 @@ A full-stack portfolio and task management project built with React, Vite, Expre
 - [Database Configuration](#database-configuration)
 - [Authentication and Security](#authentication-and-security)
 - [Testing and Verification](#testing-and-verification)
+- [CI/CD Pipeline](#cicd-pipeline)
 - [Practical Evidence and Documentation](#practical-evidence-and-documentation)
-- [Practical Progress (1-11)](#practical-progress-1-11)
-- [Practical 12 and 13](#practical-12-and-13)
+- [Practical Progress (1-12)](#practical-progress-1-12)
+- [Practical 13](#practical-13)
 - [Known Limitations and Future Improvements](#known-limitations-and-future-improvements)
 - [Author](#author)
 
@@ -426,7 +429,24 @@ The middleware in [server/middleware/validate.js](server/middleware/validate.js)
 
 ## Testing and Verification
 
-The repository does not include a formal automated test suite, but the application can be verified in practical ways:
+The repository includes both automated integration testing and manual verification workflows.
+
+### Automated Testing (Jest & Supertest)
+
+Run the automated in-memory integration test suite locally:
+
+```bash
+npm test
+```
+
+The test suite in [server/tests/api.test.js](server/tests/api.test.js) validates:
+- `GET /api/health` returns status 200 with `{ "status": "ok" }`
+- `GET /tasks` without authorization returns 401 Unauthorized
+- `GET /tasks` with an invalid/tampered token returns 401 Unauthorized
+- `GET /tasks/cache/stats` with a valid JWT returns 200 with numeric hit/miss metrics
+- `GET /unknown-route` returns 404 Route not found
+
+Tests execute entirely in-memory without requiring a live MongoDB instance or internet connection.
 
 ### Local verification
 
@@ -466,6 +486,29 @@ This returns hit/miss values for the in-memory cache layer.
 
 ---
 
+## CI/CD Pipeline
+
+The project implements a continuous integration (CI) pipeline using **GitHub Actions** defined in [.github/workflows/ci.yml](.github/workflows/ci.yml).
+
+### Workflow Triggers & Jobs
+- **Trigger**: Every `push` to the `main` branch.
+- **Runner**: `ubuntu-latest`
+- **Node Runtime**: Node.js 20 LTS (required for Mongoose 9 and Dotenv 17)
+- **Pipeline Steps**:
+  1. **Checkout Code**: Retrieves the repository source using `actions/checkout@v4`.
+  2. **Set up Node.js**: Installs Node 20 using `actions/setup-node@v4`.
+  3. **Install Dependencies**: Executes `npm install` across frontend and backend modules.
+  4. **Run Automated Tests**: Executes `npm test` with in-memory JWT credentials (`JWT_SECRET=test_secret`).
+  5. **Build Frontend**: Compiles production React assets via `npm run build` using Vite.
+
+### Running Tests Locally
+Before pushing code, run tests locally using:
+```bash
+npm test
+```
+
+---
+
 ## Practical Evidence and Documentation
 
 The repository contains practical documentation files in [docs/](docs/):
@@ -474,12 +517,13 @@ The repository contains practical documentation files in [docs/](docs/):
 - [docs/practical-9.md](docs/practical-9.md) — in-memory caching and query optimization
 - [docs/practical-10.md](docs/practical-10.md) — event-driven asynchronous processing
 - [docs/practical-11.md](docs/practical-11.md) — Docker and Docker Compose containerization
+- [docs/practical-12.md](docs/practical-12.md) — CI/CD Pipeline with GitHub Actions
 
 No image files such as `.png`, `.jpg`, or `.svg` were found under [docs/](docs/). The practical evidence in this repository is therefore represented by the Markdown documentation files rather than screenshot assets.
 
 ---
 
-## Practical Progress (1-11)
+## Practical Progress (1-12)
 
 The repository contains direct evidence for the later practicals and a complete combined application that reflects the integrated project progression.
 
@@ -496,16 +540,17 @@ The repository contains direct evidence for the later practicals and a complete 
 | 9 | In-memory caching and query optimization | Documented in [docs/practical-9.md](docs/practical-9.md) |
 | 10 | Event-driven asynchronous processing | Documented in [docs/practical-10.md](docs/practical-10.md) |
 | 11 | Docker and Docker Compose deployment | Documented in [docs/practical-11.md](docs/practical-11.md) |
+| 12 | CI/CD Pipeline with GitHub Actions | Documented in [docs/practical-12.md](docs/practical-12.md) |
 
-This project therefore represents the combined result of multi-practical full-stack development, with practical 8–11 documented in the repository.
+This project therefore represents the combined result of multi-practical full-stack development, with practicals 8–12 documented in the repository.
 
 ---
 
-## Practical 12 and 13
+## Practical 13
 
-Practical 12 and Practical 13 are not evidenced in the repository as implemented or documented artifacts.
+Practical 13 is not evidenced in the repository as an implemented or documented artifact at the current time.
 
-At the current time, the project contains direct implementation and documentation evidence up to Practical 11 only. No dedicated `practical-12` or `practical-13` files or implementation markers were found in the source tree.
+The project contains direct implementation and documentation evidence up to Practical 12. No dedicated `practical-13` files or implementation markers were found in the source tree.
 
 ---
 
