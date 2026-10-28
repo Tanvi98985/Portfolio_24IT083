@@ -17,7 +17,7 @@ describe('Task Manager API - In-Memory Integration Tests', () => {
   // Test 1: Health check endpoint
   it('GET /api/health returns 200 and status ok', async () => {
     const res = await request(app).get('/api/health');
-    expect(res.status).toBe(201);
+    expect(res.status).toBe(200);
     expect(res.body.status).toBe('ok');
     expect(res.body.message).toContain('running');
   });
