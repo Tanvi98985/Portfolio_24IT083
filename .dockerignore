@@ -1,0 +1,28 @@
+# Ignore dependencies (always install cleanly inside the container)
+node_modules
+
+# Ignore environment and local secrets
+.env
+
+# Ignore local build output
+dist
+
+# Ignore version control files
+.git
+.github
+
+# Ignore documentation and markdown files
+docs
+
+# Ignore runtime and debug log files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ignore OS-generated files
+.DS_Store
+Thumbs.db
+
+# Ensure example environment template is preserved if needed
+!.env.example

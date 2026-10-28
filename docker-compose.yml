@@ -1,0 +1,81 @@
+services:
+  # ==========================================
+  # Database Service: MongoDB 7
+  # ==========================================
+  mongodb:
+    image: mongo:7
+    container_name: mongodb_24it083
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - app-network
+    restart: on-failure
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # ==========================================
+  # Backend Service: Node.js Express API
+  # ==========================================
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: backend_24it083
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/tanvi_projects
+      - JWT_SECRET=${JWT_SECRET:-change_me_in_docker}
+      - NOTIFICATION_DELAY_MS=${NOTIFICATION_DELAY_MS:-2000}
+      - PORT=5000
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: on-failure
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # ==========================================
+  # Frontend Service: React + Vite served by Nginx
+  # ==========================================
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+      args:
+        VITE_API_BASE_URL: http://localhost:5000
+    container_name: frontend_24it083
+    ports:
+      - "5173:5173"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: on-failure
+
+# ==========================================
+# Named Volumes (Data Persistence)
+# ==========================================
+volumes:
+  mongo-data:
+    name: mongo-data_24it083
+
+# ==========================================
+# Bridge Network (Isolated Inter-Container DNS)
+# ==========================================
+networks:
+  app-network:
+    driver: bridge
