@@ -22,8 +22,7 @@ A full-stack portfolio and task management project built with React, Vite, Expre
 - [Testing and Verification](#testing-and-verification)
 - [CI/CD Pipeline](#cicd-pipeline)
 - [Practical Evidence and Documentation](#practical-evidence-and-documentation)
-- [Practical Progress (1-12)](#practical-progress-1-12)
-- [Practical 13](#practical-13)
+- [Practical Progress (1-13)](#practical-progress-1-13)
 - [Known Limitations and Future Improvements](#known-limitations-and-future-improvements)
 - [Author](#author)
 
@@ -522,12 +521,13 @@ The repository contains practical documentation files in [docs/](docs/):
 - [docs/practical-10.md](docs/practical-10.md) — event-driven asynchronous processing
 - [docs/practical-11.md](docs/practical-11.md) — Docker and Docker Compose containerization
 - [docs/practical-12.md](docs/practical-12.md) — CI/CD Pipeline with GitHub Actions
+- [docs/practical-13.md](docs/practical-13.md) — AI API Integration with Google Gemini
 
 No image files such as `.png`, `.jpg`, or `.svg` were found under [docs/](docs/). The practical evidence in this repository is therefore represented by the Markdown documentation files rather than screenshot assets.
 
 ---
 
-## Practical Progress (1-12)
+## Practical Progress (1-13)
 
 The repository contains direct evidence for the later practicals and a complete combined application that reflects the integrated project progression.
 
@@ -545,16 +545,9 @@ The repository contains direct evidence for the later practicals and a complete 
 | 10        | Event-driven asynchronous processing                  | Documented in [docs/practical-10.md](docs/practical-10.md) |
 | 11        | Docker and Docker Compose deployment                  | Documented in [docs/practical-11.md](docs/practical-11.md) |
 | 12        | CI/CD Pipeline with GitHub Actions                    | Documented in [docs/practical-12.md](docs/practical-12.md) |
+| 13        | AI API Integration with Google Gemini                 | Documented in [docs/practical-13.md](docs/practical-13.md) |
 
-This project therefore represents the combined result of multi-practical full-stack development, with practicals 8–12 documented in the repository.
-
----
-
-## Practical 13
-
-Practical 13 is not evidenced in the repository as an implemented or documented artifact at the current time.
-
-The project contains direct implementation and documentation evidence up to Practical 12. No dedicated `practical-13` files or implementation markers were found in the source tree.
+This project represents the combined result of multi-practical full-stack development, with practicals 8–13 documented in the repository.
 
 ---
 
