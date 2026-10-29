@@ -63,51 +63,33 @@ function Projects() {
       {/* Existing Portfolio Projects */}
       <div className="project-grid">
         <ProjectCard
-          title="Full Stack Task Manager (React + Node + MongoDB)"
-          description="A full-stack CRUD task manager with JWT-based authentication, protected routes, and server-side validation, built with React, Express, and MongoDB."
-          tags={[
-            "React",
-            "Node.js",
-            "Express",
-            "MongoDB",
-            "Mongoose",
-            "CORS",
-            "JWT",
-            "bcrypt",
-            "Auth Middleware",
-          ]}
-          demoUrl="/tasks"
-          githubUrl="https://github.com/Tanvi98985/task-manager"
-        />
-
-        <ProjectCard
           title="Portfolio Website"
-          description="Responsive React portfolio."
+          description="A responsive personal portfolio built with React to showcase my skills, projects, and development experience. Features a clean layout and easy navigation across different screen sizes."
         />
 
         <ProjectCard
           title="Weather App"
-          description="Weather application using API."
+          description="A weather application that fetches weather information through an API and displays current conditions and forecasts for a selected location. Provides a simple and user-friendly interface for checking weather updates."
         />
 
         <ProjectCard
           title="Parking Booking"
-          description="React parking slot booking."
+          description="A parking slot booking application that allows users to view parking options and book available slots. Simplifies parking management through an organized and easy-to-use interface."
         />
 
         <ProjectCard
           title="Sign to Text"
-          description="Converts sign language gestures into text using computer vision."
+          description="A computer vision-based application that recognizes sign language gestures and converts them into readable text. Uses image processing and hand gesture recognition to support sign-to-text translation."
         />
 
         <ProjectCard
           title="MyShop"
-          description="E-commerce web app for browsing and purchasing products."
+          description="An e-commerce web application for browsing products and exploring an online shopping experience. Organizes product information in a clear interface to make product discovery easier."
         />
 
         <ProjectCard
           title="Campus Bazar"
-          description="Platform for students to buy and sell items within campus."
+          description="A student-focused marketplace that helps users buy and sell items within their campus community. Makes it easier for students to discover available items and connect with potential buyers or sellers."
         />
       </div>
 
