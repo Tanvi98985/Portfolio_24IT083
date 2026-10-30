@@ -6,6 +6,7 @@ import './listeners.js';
 import taskRoutes from './routes/taskRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import aiRoutes from './routes/aiRoutes.js';
+import contactRoutes from './routes/contactRoutes.js';
 
 // Ensure dotenv loads first before process.env is accessed
 dotenv.config();
@@ -35,6 +36,9 @@ app.use('/tasks', taskRoutes);
 
 // Mount AI Assistant routes (protected with JWT auth middleware)
 app.use('/api/ai', aiRoutes);
+
+// Mount Contact Form routes (public endpoint)
+app.use('/api/contact', contactRoutes);
 
 // Health check / API status route
 app.get('/api/health', (req, res) => {

@@ -222,3 +222,21 @@ export const generateDescription = async (title) => {
   throw new Error(errorMessage);
 };
 
+/* ==========================================================================
+   Contact Form Endpoint
+   ========================================================================== */
+
+/**
+ * Submit a contact message
+ * @param {Object} contactData - { name, email, message }
+ * @returns {Promise<Object>} Response data
+ */
+export const submitContactMessage = async (contactData) => {
+  const response = await fetch(`${BASE_URL}/api/contact`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(contactData),
+  });
+  return handleResponse(response);
+};
+

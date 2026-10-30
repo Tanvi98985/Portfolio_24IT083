@@ -56,3 +56,55 @@ export const validateTask = (req, res, next) => {
   req.body.title = title.trim();
   return next();
 };
+
+export const validateContact = (req, res, next) => {
+  const { name, email, message } = req.body;
+
+  if (!name || typeof name !== 'string' || name.trim() === '') {
+    return res.status(400).json({
+      error: 'Name is required.',
+    });
+  }
+
+  if (name.trim().length < 2) {
+    return res.status(400).json({
+      error: 'Name must be at least 2 characters long.',
+    });
+  }
+
+  if (name.trim().length > 100) {
+    return res.status(400).json({
+      error: 'Name cannot exceed 100 characters.',
+    });
+  }
+
+  if (!email || typeof email !== 'string' || !EMAIL_REGEX.test(email.trim())) {
+    return res.status(400).json({
+      error: 'Please provide a valid email address.',
+    });
+  }
+
+  if (!message || typeof message !== 'string' || message.trim() === '') {
+    return res.status(400).json({
+      error: 'Message is required.',
+    });
+  }
+
+  if (message.trim().length < 5) {
+    return res.status(400).json({
+      error: 'Message must be at least 5 characters long.',
+    });
+  }
+
+  if (message.trim().length > 2000) {
+    return res.status(400).json({
+      error: 'Message cannot exceed 2000 characters.',
+    });
+  }
+
+  // Sanitize inputs
+  req.body.name = name.trim();
+  req.body.email = email.trim().toLowerCase();
+  req.body.message = message.trim();
+  return next();
+};
